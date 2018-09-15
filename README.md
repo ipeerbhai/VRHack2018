@@ -18,3 +18,8 @@ This Repo is for the 2018 VR Hackathon at the CERC.
 6. Be able to stream a 3d mesh + materials.
 7. Have working animations of the 3d object.
 8. Have interaction between people and the 3d object.
+
+
+## Question Driven Dev Doc ##
+As we develop this application, please see the questions here:
+https://docs.google.com/document/d/1ea348lXKTf8WunGun6BxUzzfOFEe4dFlZvjGSGbk0Ys/
