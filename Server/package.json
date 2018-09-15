@@ -1,0 +1,19 @@
+{
+  "name": "websocketserver",
+  "version": "0.0.1",
+  "description": "An experimental websocket server to try sending streams between clients in a unity game.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "websocket",
+    "unity"
+  ],
+  "author": "Imran Peerbhai",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3",
+    "express-ws": "^4.0.0"
+  }
+}
