@@ -16,6 +16,9 @@ public class SoundManager : MonoBehaviour {
         {
             m_recordingDevice = micDevice;
         }
+
+        if (m_recordingDevice.Length == 0)
+            throw new System.Exception("No recording device");
     }
 
     // Use this for initialization
@@ -32,6 +35,7 @@ public class SoundManager : MonoBehaviour {
             int numSamples = Microphone.GetPosition(null);
             if (numSamples > 0)
             {
+                int checkLevel = 0;
                 // we have data.  Promote it to a data buffer, restart the microphone...
                 float[] samples = new float[numSamples];
                 m_microphoneAudioSource.clip.GetData(samples, 0); // copy the float samples over to a temp buffer;
@@ -40,14 +44,28 @@ public class SoundManager : MonoBehaviour {
                 byte[] PCM8Samples = new byte[numSamples];
                 for ( int i = 0; i < numSamples; i++)
                 {
-                    PCM8Samples[i] = (byte)(samples[i] * 255);
+                    int sample = (int)(samples[i] * 127);
+                    checkLevel += sample;
+                    PCM8Samples[i] = (byte)(sample);
                 }
-                RecordingData = PCM8Samples;
-
-                // restart the Mic
-                Microphone.End(null);
-                m_microphoneAudioSource.clip = Microphone.Start(m_recordingDevice, false, m_recordingSeconds, RecordingFrequency);
+                if (checkLevel > 0)
+                {
+                    RecordingData = PCM8Samples;
+                }
+                else
+                {
+                    // hmm, too quiet.
+                    int i = 0;
+                    i++;
+                }
             }
+            // Restart Mic
+            //Microphone.End(null);
+            //m_microphoneAudioSource.clip = Microphone.Start(m_recordingDevice, false, m_recordingSeconds, RecordingFrequency);
         }
-	}
+        else
+        {
+            m_microphoneAudioSource.clip = Microphone.Start(m_recordingDevice, false, m_recordingSeconds, RecordingFrequency);
+        }
+    }
 }

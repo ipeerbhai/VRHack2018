@@ -21,9 +21,10 @@ public class MainSceneManager : MonoBehaviour {
         // Check the sound manager and see if it has data for us.
         if ((m_soundManager.RecordingData != null) && (m_soundManager.RecordingData.Length > 0))
         {
-            m_webManager.Data = m_soundManager.RecordingData;
+            TransferData Data = TransferData.Empty();
+            Data.TypeOfByte = ByteCodes.sound;
+            Data.SoundData = m_soundManager.RecordingData;
+            m_webManager.QueueData(Data);
         }
-
-
     }
 }

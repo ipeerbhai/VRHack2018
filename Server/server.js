@@ -1,23 +1,22 @@
 var express = require('express');
 var app = express();
 var expressWs = require('express-ws')(app);
- 
-app.use(function (req, res, next) {
-  console.log('middleware');
-  req.testing = 'testing';
-  return next();
+
+
+app.ws('/', function (ws, req) {
+    ws.on('message', function (msg) {
+
+        expressWs.getWss().clients.forEach(client => {
+            if (client === ws) {
+                // this is my inbound connector.  I shouldn't send back anything...
+            }
+            // resend the message to all clients...
+            client.send(msg)
+        });
+
+        console.log(msg);
+    });
 });
- 
-app.get('/', function(req, res, next){
-  console.log('get route', req.testing);
-  res.end();
-});
- 
-app.ws('/', function(ws, req) {
-  ws.on('message', function(msg) {
-    console.log(msg);
-  });
-  console.log('socket', req.testing);
-});
- 
+
 app.listen(3000);
+console.log("Listening on port 3000 for WS / route");
