@@ -18,6 +18,12 @@ public class MainSceneManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        // Check the sound manager and see if it has data for us.
+        if ((m_soundManager.RecordingData != null) && (m_soundManager.RecordingData.Length > 0))
+        {
+            m_webManager.Data = m_soundManager.RecordingData;
+        }
+
+
+    }
 }

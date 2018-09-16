@@ -7,7 +7,6 @@ public class webTransactionManager : MonoBehaviour {
     private System.Guid m_thisClient; // Track which client this is.
     private WebSocketSharpUnityMod.WebSocket m_connection; // use this connection to a websocket service.
     private Coroutine m_runningTransfer; // Hold a reference to the running send coroutine
-    static private string m_RecordingDevice = ""; // hold the name of the default recording device.
 
     public byte[] Data { get; set; } // an outbound buffer we want to send over the websocket.
 
@@ -17,18 +16,10 @@ public class webTransactionManager : MonoBehaviour {
         System.Console.WriteLine(e.ToString());
     }
 
-    void InitMicrophone()
-    {
-        foreach (string micDevice in Microphone.devices)
-        {
-            m_RecordingDevice = micDevice;
-        }
-    }
 
     // Use this for initialization
     void Start () {
         m_thisClient = System.Guid.NewGuid(); // create a random number we can send...
-        InitMicrophone(); // find a microphone
 
         m_connection = new WebSocketSharpUnityMod.WebSocket("ws://127.0.0.1:3000"); // connect to a server running on me.
         m_connection.OnMessage += MsgHandler; // register an event handler.
