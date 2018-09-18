@@ -19,4 +19,4 @@ app.ws('/', function (ws, req) {
 });
 
 app.listen(4000);
-console.log("Listening on port 3000 for WS / route");
+console.log("Listening on port 4000 for WS / route");

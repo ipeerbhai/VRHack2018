@@ -11,11 +11,15 @@ public class MainSceneManager : MonoBehaviour {
         // get references to the inited monobehaviors.
         GameObject web = GameObject.Find("WebManager");
         m_webManager = (webTransactionManager)web.GetComponent(typeof(webTransactionManager));
-
         m_soundManager = (SoundManager)GameObject.Find("SoundManager").GetComponent(typeof(SoundManager)); // one-liner get of the monobehavior
-
+        m_webManager.Scene = this;
     }
 	
+    public void ForwardClipForPlay(byte[] buffer)
+    {
+        m_soundManager.PlaybackBuffers.Enqueue(buffer);
+    }
+
 	// Update is called once per frame
 	void Update () {
         // Check the sound manager and see if it has data for us.

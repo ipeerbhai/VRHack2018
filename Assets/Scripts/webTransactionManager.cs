@@ -96,16 +96,6 @@ public struct TransferData
                 TypeOfByte = ByteCodes.PictureData;
                 break;
         }
-        byte[] LengthBytes = new byte[4];
-        LengthBytes[0] = LeftMostInt32DataLength;
-        LengthBytes[1] = LeftInt32DataLength;
-        LengthBytes[2] = RightInt32DataLength;
-        LengthBytes[3] = RightMostInt32DataLength;
-
-
-        // let's get the length
-        int Length = BitConverter.ToInt32(LengthBytes, 0);
-
 
         // Copy the data to the correct buffer.
         switch (TypeOfByte)
@@ -128,12 +118,13 @@ public struct TransferData
 
 public class webTransactionManager : MonoBehaviour {
 
-    private System.Guid m_thisClient; // Track which client this is.
+    //private System.Guid m_thisClient; // Track which client this is.
     private string m_wsURI = @"ws://dev.thinkpredict.com:4000";
+    public MainSceneManager Scene { get; set; }
     private WebSocketSharpUnityMod.WebSocket m_connection; // use this connection to a websocket service.
     private Coroutine m_runningTransfer; // Hold a reference to the running send coroutine
     private Queue<TransferData> OutboundData = new Queue<TransferData>(); // heading to cloud.
-    private Queue<TransferData> InboundData= new Queue<TransferData>(); // coming from cloud.
+    //private Queue<TransferData> InboundData= new Queue<TransferData>(); // coming from cloud.
     private byte[] Data { get; set; } // an outbound buffer we want to send over the websocket.byte
 
     void MsgHandler(object sender, WebSocketSharpUnityMod.MessageEventArgs e)
@@ -141,13 +132,20 @@ public class webTransactionManager : MonoBehaviour {
         TransferData Datum = TransferData.Empty();
         if (e.IsBinary)
             Datum.FromCloud(e.RawData);
+
+        // Handle the datum
+
+        if (Datum.TypeOfByte == ByteCodes.sound)
+        {
+            Scene.ForwardClipForPlay(Datum.SoundData);
+        }
         //System.Console.WriteLine(e.Data.ToString());
     }
 
 
     // Use this for initialization
     void Start () {
-        m_thisClient = System.Guid.NewGuid(); // create a random number we can send...
+        //m_thisClient = System.Guid.NewGuid(); // create a random number we can send...
 
         m_connection = new WebSocketSharpUnityMod.WebSocket(m_wsURI); // connect to a server running on me.
         m_connection.OnMessage += MsgHandler; // register an event handler.
